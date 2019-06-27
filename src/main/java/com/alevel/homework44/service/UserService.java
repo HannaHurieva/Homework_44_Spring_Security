@@ -6,11 +6,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
-    List<User> findAll(boolean done);
+    List<User> getAll ();
 
-    Optional<User> findById(Long id);
+    User findById(Long id);
     User findByUsername(String username);
 
-    Long save(User user);
+    User register(User user);
+
     void delete(long id);
 }

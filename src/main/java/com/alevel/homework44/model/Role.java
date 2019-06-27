@@ -1,4 +1,4 @@
-package com.alevel.homework44.model.enums;
+package com.alevel.homework44.model;
 
 import org.springframework.security.core.GrantedAuthority;
 

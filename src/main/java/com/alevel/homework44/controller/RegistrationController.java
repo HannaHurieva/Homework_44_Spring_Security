@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 import java.util.Map;
@@ -36,11 +37,12 @@ public class RegistrationController {
             return "registration";
         }
 
-        if (!userService.addUser(user)) {
+        if (!userService.isExistUser(user)) {
             model.addAttribute("usernameError", "User exists!");
             return "registration";
         }
 
-        return "redirect:/login";
+        userService.register(user);
+        return "redirect:/auth/login";
     }
 }

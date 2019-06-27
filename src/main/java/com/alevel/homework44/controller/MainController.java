@@ -5,11 +5,10 @@ import com.alevel.homework44.model.Song;
 import com.alevel.homework44.repository.SongRepo;
 import com.alevel.homework44.service.SongNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -42,8 +41,8 @@ public class MainController {
                       @RequestParam String singer,
                       Map<String, Object> model) {
 
-        Song message = new Song(title, singer);
-        songRepo.save(message);
+        Song song = new Song(title, singer);
+        songRepo.save(song);
 
         Iterable<Song> songs = songRepo.findAll();
         model.put("songs", songs);
@@ -51,9 +50,15 @@ public class MainController {
     }
 
     @GetMapping("/song/{id}")
-    public Song getSongById(@PathVariable Long id) {
-        return songRepo.findById(id).
-                orElseThrow(() -> new SongNotFoundException(id));
+    public ResponseEntity getSongById(@PathVariable Long id) {
+        Song song = songRepo.findById(id).orElse(null);
+        if(song == null){
+            new SongNotFoundException(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(song, HttpStatus.OK);
+    /*    return songRepo.findById(id).
+                orElseThrow(() -> new SongNotFoundException(id));*/
     }
 
     @PostMapping("filter")
